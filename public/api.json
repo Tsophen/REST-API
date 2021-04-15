@@ -1,0 +1,531 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "<Brand Name>'s API Documentation",
+    "description": "Welcome to the Brand Name's API Documentation",
+    "termsOfService": "https://lielamar.com",
+    "contact": {
+      "name": "<Brand Name> Support",
+      "url": "https://domain.com/support",
+      "email": "support@domain.com"
+    },
+    "license": {
+      "name": "<Brand Name> 2020. All Rights Reserved."
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.domain.com/v1.0/",
+      "description": "API Server"
+    }
+  ],
+  "security": [
+    {
+      "JWT": []
+    }
+  ],
+  "paths": {
+    "/users/signup": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Registers a user",
+        "operationId": "Sign Up",
+        "security": [],
+        "parameters": [
+          {
+            "type": "object",
+            "name": "email",
+            "in": "query",
+            "description": "Email address of the user",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "object",
+            "name": "name",
+            "in": "query",
+            "description": "Full name of the user",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "object",
+            "name": "password",
+            "in": "query",
+            "description": "PBKDF2 Encrypted password of the user",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/signup"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Generates a Json Web Token",
+        "operationId": "Generate JWT",
+        "security": [],
+        "parameters": [
+          {
+            "type": "object",
+            "name": "email",
+            "in": "query",
+            "description": "Email address of the user",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "object",
+            "name": "password",
+            "in": "query",
+            "description": "PBKDF2 Encrypted password of the user",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logged In",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/login"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/otp": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Generates a One Time Password",
+        "operationId": "Generate OTP",
+        "security": [],
+        "parameters": [
+          {
+            "type": "object",
+            "name": "email",
+            "in": "query",
+            "description": "Email address of the user",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "object",
+            "name": "password",
+            "in": "query",
+            "description": "PBKDF2 Encrypted password of the user",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created OTP",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/otp"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/:userId": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Loads general information of a user",
+        "operationId": "Load User",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Loaded User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/load"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/load/vault/:userId": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Loads a user's encrypted vault",
+        "operationId": "Load User's Vault",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Loaded User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loadvault"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/update/vault/:userId": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Updates a user's vault",
+        "operationId": "Update User's Vault",
+        "parameters": [
+          {
+            "type": "object",
+            "name": "properties",
+            "in": "query",
+            "description": "Properties to update",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "object",
+              "example": {
+                "vault": "encrypted value value"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/updatevault"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/verification/email/:authToken": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Verifies an email address",
+        "operationId": "verify Email",
+        "security": [],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Verified Email Address",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/verifyemail"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "JWT": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header",
+        "description": "A Json Web Token with a lifetime of 1 hour. Can be obtained by registering a new user or logging in with an existing user."
+      }
+    },
+    "schemas": {
+      "signup": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Successfully created user"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "createdUser": {
+                "id": "14kda75ladh85ba36nda12maj42ka3k4",
+                "email": "example@example.com",
+                "emailVerificationToken": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw",
+                "name": "John Doe",
+                "request": {
+                  "type": "GET",
+                  "url": "https://api.domain.com/v1.0/users/14kda75ladh85ba36nda12maj42ka3k4"
+                },
+                "token": "opUJIIt8ypqHc7ckyhyoe3aS1BcjreOuz5Owuo3QmoYgjwFL1I2i14jTenCiW7ZUOBkB1jWR65hV9E2BIom6gOWus3Gb92WiC3dcQy4Ur5B7X19KtAtrDW"
+              }
+            }
+          }
+        },
+        "description": "Signup Schema"
+      },
+      "login": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Successfully authenticated"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "loadedUser": {
+                "id": "14kda75ladh85ba36nda12maj42ka3k4",
+                "email": "example@example.com",
+                "request": {
+                  "type": "GET",
+                  "url": "https://api.domain.com/v1.0/users/14kda75ladh85ba36nda12maj42ka3k4"
+                },
+                "token": "opUJIIt8ypqHc7ckyhyoe3aS1BcjreOuz5Owuo3QmoYgjwFL1I2i14jTenCiW7ZUOBkB1jWR65hV9E2BIom6gOWus3Gb92WiC3dcQy4Ur5B7X19KtAtrDW"
+              }
+            }
+          }
+        },
+        "description": "Login Schema"
+      },
+      "otp": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Successfully created an OTP"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "otp": "opUJIIt8ypqHc7ckyhyoe3aS1BcjreOuz5Owuo3QmoYgjwFL1I2i14jTenCiW7ZUOBkB1jWR65hV9E2BIom6gOWus3Gb92WiC3dcQy4Ur5B7X19KtAtrDW"
+            }
+          }
+        },
+        "description": "OTP Schema"
+      },
+      "load": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Successfully loaded user"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "loadedUser": {
+                "id": "14kda75ladh85ba36nda12maj42ka3k4",
+                "email": "example@example.com",
+                "emailVerificationToken": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw",
+                "name": "John Doe"
+              }
+            }
+          }
+        },
+        "description": "Load Schema"
+      },
+      "loadvault": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Successfully loaded user"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "vault": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw"
+            }
+          }
+        },
+        "description": "Load vault Schema"
+      },
+      "updatevault": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Successfully updated user"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "vault": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw"
+            }
+          }
+        },
+        "description": "Load vault Schema"
+      },
+      "verifyemail": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Successfully verified email"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "user": {
+                "email": "example@example.com"
+              }
+            }
+          }
+        },
+        "description": "Verify email"
+      }
+    }
+  }
+}
