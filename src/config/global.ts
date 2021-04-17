@@ -45,6 +45,8 @@ const messages = {
   successfullyLoadedUser: "Successfully loaded user",
   successfullyLoadedAllUsers: "Successfully loaded all users",
   successfullyDeletedUser: "Successfully deleted user",
+  successfullyCreatedAccessToken: "Successfully created Access Token",
+  successfullyCreatedRefreshToken: "Successfully created Refresh Token",
 
   missingAuthorizationHeader: "Missing authorization header",
   missingOneOrMoreFields: "Missing one of more fields [keys]",
@@ -59,16 +61,19 @@ const messages = {
   failedToUpdateUser: "Failed to update user",
   failedToLoadAllUser: "Failed to load all users",
   failedToLoadUser: "Failed to load user",
+  failedToCreateAccessToken: "Failed to create Access Token",
+  failedToCreateRefreshToken: "Failed to create Refresh Token",
   
   invalidCredentials: "Invalid credentials",
   invalidEmail: "Invalid email",
   invalidFullName: "Invalid full name",
   invalidPassword: "Invalid password",
+  invalidRequestSyntax: "Invalid request syntax",
   
-  forbidden: "You don't have enough permissions to do that",
+  forbidden: "You don't have enough permissions to do that. If you believe this is a mistake, please contact an administrator :)",
 
-  internalServerError: "An internal error with the server has occured. Please contact an Administrator :)",
-  internalMongoDBError: "An internal error with MongoDB has occured. Please contact an Administrator :)"
+  internalServerError: "An internal error with the server has occured. Please contact an administrator :)",
+  internalMongoDBError: "An internal error with MongoDB has occured. Please contact an administrator :)"
 }
 
 export {

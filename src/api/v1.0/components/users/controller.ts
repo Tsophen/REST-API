@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { pbkdf2 } from "crypto";
 
 import logger from "../../../../config/logger";
-import { emailRegex, fullNameRegex, validatePBKDF2, parsePBKDF2, messages } from "../../../../config/global";
 import { createResponse } from "../../../../config/response";
+import { emailRegex, fullNameRegex, validatePBKDF2, parsePBKDF2, messages } from "../../../../config/global";
 
 import { UsersService } from "./service";
 import { IUser } from "./model";
@@ -17,20 +17,20 @@ export class UsersController {
    * @req    Request object
    * @res    Response object
    * @next   Next function
-   * @return Returns a Promise of a response or void
+   * @return JSON response
    */
-  public async readUsers(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-    this.service.getUsers()
-      .then(users => {
-        logger.info("Successfully retrieved information on all users");
+  public async readUsers(req: Request, res: Response, next: NextFunction) {
+    try {
+      const users = await this.service.getUsers("_id email name");
 
-        return res.status(200).json(createResponse(true, messages.successfullyLoadedAllUsers, users));
-      })
-      .catch(error => {
-        logger.error(error.message, error);
+      logger.debug(`Successfully retrieved information on all users`);
 
-        return res.status(502).json(createResponse(false, messages.failedToLoadAllUser));
-      });
+      return res.status(200).json(createResponse(true, messages.successfullyLoadedAllUsers, users));
+    } catch(exception) {
+      logger.error(exception.message, exception);
+
+      return res.status(502).json(createResponse(false, messages.failedToLoadAllUser));
+    }
   }
 
   /**
@@ -39,22 +39,22 @@ export class UsersController {
    * @req    Request object
    * @res    Response object
    * @next   Next function
-   * @return Returns a Promise of a response or void
+   * @return JSON response
    */
-  public async readUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  public async readUser(req: Request, res: Response, next: NextFunction) {
     const { userId } = req.params;
 
-    this.service.getUser(userId)
-      .then(user => {
-        logger.info(`Successfully retrieved information on user ${userId}`);
+    try {
+      const user = await this.service.getUser(userId, "_id email name")
 
-        return res.status(200).json(createResponse(true, messages.successfullyLoadedUser, user));
-      })
-      .catch(error => {
-        logger.error(error.message, error);
+      logger.debug(`Successfully retrieved information on user ${userId}`);
 
-        return res.status(502).json(createResponse(false, messages.failedToLoadUser));
-      });
+      return res.status(200).json(createResponse(true, messages.successfullyLoadedUser, user));
+    } catch(exception) {
+      logger.error(exception.message, exception);
+
+      return res.status(502).json(createResponse(false, messages.failedToLoadUser));
+    }
   }
 
   /**
@@ -63,9 +63,9 @@ export class UsersController {
    * @req    Request object
    * @res    Response object
    * @next   Next function
-   * @return Returns a Promise of a response or void
+   * @return JSON response
    */
-  public async createUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  public async createUser(req: Request, res: Response, next: NextFunction) {
     const { email, name, password, reminder } = req.body;
 
     if(!email || !name || !password)
@@ -84,22 +84,22 @@ export class UsersController {
       if(err)
         return res.status(500).json(createResponse(false, messages.internalServerError));
 
-      this.service.createUser(email, name, derivedKey.toString("hex"), reminder)
-        .then(createdUser => {
-          logger.info(`Successfully created new user`, createdUser);
+      try {
+        const createdUser = await this.service.createUser(email, name, derivedKey.toString("hex"), reminder);
 
-          return res.status(201).json(createResponse(true, messages.successfullyCreatedUser, {
-            id: (<IUser>createdUser)._id,
-            email: (<IUser>createdUser).email,
-            emailVerificationToken: (<IUser>createdUser).emailVerificationToken,
-            name: (<IUser>createdUser).name
-          }));
-        })
-        .catch(error => {
-          logger.error(error.message, error);
-
-          return res.status(502).json(createResponse(false, messages.failedToCreateUser));
-        });
+        logger.debug(`Successfully created new user`, createdUser);
+      
+        return res.status(201).json(createResponse(true, messages.successfullyCreatedUser, {
+          id: (<IUser>createdUser)._id,
+          email: (<IUser>createdUser).email,
+          emailVerificationToken: (<IUser>createdUser).emailVerificationToken,
+          name: (<IUser>createdUser).name
+        }));
+      } catch(exception) {
+        logger.error(exception.message, exception);
+      
+        return res.status(502).json(createResponse(false, messages.failedToCreateUser));
+      }
     });
   }
 
@@ -109,29 +109,33 @@ export class UsersController {
    * @req    Request object
    * @res    Response object
    * @next   Next function
-   * @return Returns a Promise of a response or void
+   * @return JSON response
    */
-  public async updateUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  public async updateUser(req: Request, res: Response, next: NextFunction) {
     const { userId } = req.params;
 
     if(!req.body)
       return res.status(400).json(createResponse(false, messages.missingOneOrMoreFields));
+      
+    if(!(Symbol.iterator in Object(req.body)))
+      return res.status(400).json(createResponse(false, messages.invalidRequestSyntax));
 
     const updateOperations: any = {};
     for(const operation of req.body)
       updateOperations[operation.property] = operation.value;
 
-    this.service.updateUser(userId, updateOperations)
-      .then(updatedUser => {
-        logger.info(`Successfully updated user ${userId}`, updatedUser);
+    try {
+      const updatedUser = await this.service.updateUser(userId, updateOperations);
 
-        return res.status(200).json(createResponse(true, messages.successfullyUpdatedUser, updatedUser));
-      })
-      .catch(error => {
-        logger.error(error.message, error);
+      logger.debug(`Successfully updated user ${userId}`, updatedUser);
 
-        return res.status(502).json(createResponse(false, messages.failedToUpdateUser));
-      });
+      // TODO: make sure that updateUser response only contains the updated fields and not all fields!
+      return res.status(200).json(createResponse(true, messages.successfullyUpdatedUser, updatedUser));
+    } catch(exception) {
+      logger.error(exception.message, exception);
+
+      return res.status(502).json(createResponse(false, messages.failedToUpdateUser));
+    }
   }
 
   /**
@@ -140,21 +144,21 @@ export class UsersController {
    * @req    Request object
    * @res    Response object
    * @next   Next function
-   * @return Returns a Promise of a response or void
+   * @return JSON response
    */
-  public async deleteUser(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+  public async deleteUser(req: Request, res: Response, next: NextFunction) {
     const { userId } = req.params;
 
-    this.service.deleteUser(userId)
-      .then(deletedUser => {
-        logger.info(`Successfully deleted user ${userId}`, deletedUser);
+    try {
+      const deletedUser = await this.service.deleteUser(userId);
 
-        return res.status(204).json(createResponse(true, messages.successfullyDeletedUser));
-      })
-      .catch(error => {
-        logger.error(error.message, error);
+      logger.debug(`Successfully deleted user ${userId}`, deletedUser);
 
-        return res.status(502).json(createResponse(false, messages.failedToCreateUser));
-      });
+      return res.status(204).json(createResponse(true, messages.successfullyDeletedUser));
+    } catch(exception) {
+      logger.error(exception.message, exception);
+
+      return res.status(502).json(createResponse(false, messages.failedToCreateUser));
+    }
   }
 }

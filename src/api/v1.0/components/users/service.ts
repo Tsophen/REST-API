@@ -3,25 +3,23 @@ import { randomString } from "../../../../config/global";
 import User, { IUser } from "./model";
 
 export class UsersService {
-  private readonly retrievables: string = "_id email name"
-
   /**
    * Retrieves data on all users
    * 
    * @returns   Promise of a list of users/an error 
    */
-  public async getUsers(): Promise<IUser[] | Error> {
-    return new Promise((resolve, reject) => {
-      User.find().select(this.retrievables).exec()
-        .then(users => {
-          if(!users)
-            return reject(new Error("Could not load users from the database"));
-            
-          return resolve(users);
-        })
-        .catch(error => {
-          return reject(error);
-        });
+  public async getUsers(select?: string): Promise<IUser[] | Error> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const users = await (select ? User.find().select(select) : User.find()).exec();
+
+        if(!users)
+          return reject(new Error("Could not load users from the database"));
+        
+        return resolve(users);
+      } catch(exception) {
+        return reject(exception);
+      }
     });
   }
 
@@ -31,18 +29,18 @@ export class UsersService {
    * @param userId   ID of the user to retrieve data on
    * @returns        Promise of a user/an error 
    */
-  public getUser(userId: string): Promise<IUser | Error> {
-    return new Promise((resolve, reject) => {
-      User.findById(userId).select(this.retrievables).exec()
-        .then(user => {
-          if(!user)
-            return reject(new Error("Could not load user from the database"));
-            
-          return resolve(user);
-        })
-        .catch(error => {
-          return reject(error);
-        });
+  public getUser(userId: string, select?: string): Promise<IUser | Error> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const user = await (select ? User.findById(userId).select(select) : User.findById(userId)).exec();
+
+        if(!user)
+          return reject(new Error("Could not load user from the database"));
+        
+        return resolve(user);
+      } catch(exception) {
+        return reject(exception);
+      }
     });
   }
 
@@ -56,39 +54,33 @@ export class UsersService {
    * @returns          Promise of a (created) user/an error 
    */
   public createUser(email: string, name: string, vaultKey: string, reminder?: string): Promise<IUser | Error> {
-    return new Promise((resolve, reject) => {
-      User.findOne({ email }).exec()
-        .then(user => {
-          if(user)
-            return reject(new Error("User with the provided email already exists!"));
-          
-          const newUser = new User({
-            email: email,
-            verified: false,
-            emailVerificationToken: randomString(128),
-            vaultKey: vaultKey,
-            reminder: reminder,
-            name: name,
-            vault: {
-                passwords: "",
-                notes: "",
-                settings: "",
-                personal: ""
-            },
-            permissionLevel: 1
-          });
+    return new Promise(async (resolve, reject) => {
+      try {
+        const exsitingUser = await User.findOne({ email }).exec();
 
-          newUser.save()
-            .then(createdUser => {
-              return resolve(createdUser);
-            })
-            .catch(error => {
-              return reject(error);
-            })
-        })
-        .catch(error => {
-          return reject(error);
+        if(exsitingUser)
+          return reject(new Error("User with the provided email already exists!"));
+        
+        const newUser = new User({
+          email: email,
+          verified: false,
+          emailVerificationToken: randomString(128),
+          vaultKey: vaultKey,
+          reminder: reminder,
+          name: name,
+          vault: {
+            passwords: "",
+            notes: "",
+            settings: "",
+            personal: ""
+          },
+          permissionLevel: 1
         });
+
+        return resolve(await newUser.save());
+      } catch(exception) {
+        return reject(exception);
+      }
     });
   }
 
@@ -100,17 +92,17 @@ export class UsersService {
    * @returns                  Promise of an (update) user/an error 
    */
   public updateUser(userId: string, updateOperations: IUser): Promise<IUser | Error> {
-    return new Promise((resolve, reject) => {
-      User.findOneAndUpdate({ _id: userId }, { $set: updateOperations }).exec()
-        .then(updatedUser => {
-          if(!updatedUser)
-            return reject(new Error("Couldn't find any user with the given id"));
-          
-          return resolve(updatedUser);
-        })
-        .catch(error => {
-          return reject(error);
-        });
+    return new Promise(async (resolve, reject) => {
+      try {
+        const updatedUser = await User.findOneAndUpdate({ _id: userId }, { $set: updateOperations }).exec();
+
+        if(!updatedUser)
+          return reject(new Error("Couldn't find any user with the given id"));
+        
+        return resolve(updatedUser);
+      } catch(exception) {
+        return reject(exception);
+      }
     });
   }
 
@@ -121,17 +113,17 @@ export class UsersService {
    * @returns        Promise of an (update) user/an error 
    */
   public deleteUser(userId: string): Promise<IUser | Error> {
-    return new Promise((resolve, reject) => {
-      User.remove({ _id: userId }).exec()
-        .then(result => {
-          if(result.deletedCount === 0)
-            return reject(new Error("Could not find any user with the given id"));
+    return new Promise(async (resolve, reject) => {
+      try {
+        const deletedUser = await User.remove({ _id: userId }).exec();
 
-          return resolve(result);
-        })
-        .catch(error => {
-          return reject(error);
-        });
+        if(!deletedUser || deletedUser.deletedCount === 0)
+          return reject(new Error("Could not find any user with the given id"));
+        
+        return resolve(deletedUser);
+      } catch(exception) {
+        return reject(exception);
+      }
     });
   }
 }

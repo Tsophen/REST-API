@@ -25,10 +25,11 @@
     "@types/jsonwebtoken": "^8.5.1",
     "@types/mongoose": "^5.10.4",
     "@types/serve-favicon": "^2.5.2",
+    "module-alias": "^2.2.2",
     "nodemon": "^2.0.7"
   },
   "dependencies": {
-    "@lielamar/logger": "^1.0.1",
+    "@lielamar/logger": "^1.0.5",
     "compression": "^1.7.4",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",

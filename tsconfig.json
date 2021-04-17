@@ -4,9 +4,13 @@
     "module": "commonjs",
 
     "outDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@config": ["./src/config/*"],
+      "@common": ["./src/common/*"],
+    },
 
     "strict": true,
-
     "esModuleInterop": true,
 
     "skipLibCheck": true,
