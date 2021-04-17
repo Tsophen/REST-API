@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 
-import { createResponse } from "../config/response";
+import { createResponse } from "$config/response";
 
 const errorHandler = (req: Request, res: Response, next: NextFunction) => {
   const error = new Error("Not found");

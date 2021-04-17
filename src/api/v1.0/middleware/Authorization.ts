@@ -2,12 +2,12 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { pbkdf2 } from "crypto";
 
-import logger from "../../../config/logger";
-import { createResponse } from "../../../config/response";
-import { emailRegex, messages, parsePBKDF2, validatePBKDF2 } from "../../../config/global";
-import { RESOURCE, ACTION, hasPermission } from '../../../config/permissions';
+import logger from "$config/logger";
+import { createResponse } from "$config/response";
+import { emailRegex, messages, parsePBKDF2, validatePBKDF2 } from "$config/global";
+import { RESOURCE, ACTION, hasPermission } from '$config/permissions';
 
-import User from "../components/users/model";
+import User from "$api/v1.0/components/users/model"
 
 export class Authorization {
   /**

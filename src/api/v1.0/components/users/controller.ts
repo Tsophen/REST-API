@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { pbkdf2 } from "crypto";
 
-import logger from "../../../../config/logger";
-import { createResponse } from "../../../../config/response";
-import { emailRegex, fullNameRegex, validatePBKDF2, parsePBKDF2, messages } from "../../../../config/global";
+import logger from "$config/logger";
+import { createResponse } from "$config/response";
+import { emailRegex, fullNameRegex, validatePBKDF2, parsePBKDF2, messages } from "$config/global";
 
 import { UsersService } from "./service";
-import { IUser } from "./model";
+import { IUser } from "$api/v1.0/users/model";
 
 export class UsersController {
   private readonly service: UsersService = new UsersService();

@@ -4,20 +4,20 @@ const emailRegex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
 const fullNameRegex = /^[a-zA-Z]([- ']?[a-zA-Z]+)+( [a-zA-Z]([- ']?[a-zA-Z]+)*)+$/;
 
 /**
- * Validates a password (whether it was PBKDF2ed or not)
+ * Validates an object (whether it was PBKDF2ed or not)
  * 
- * @param password   Password to validate
- * @returns          @Boolean Whether the password is valid
+ * @param object   Object to validate
+ * @returns        @Boolean Whether the object was PBKDF2ed
  */
-const validatePBKDF2 = (password: object): boolean => true;
+const validatePBKDF2 = (object: object): boolean => true;
 
 /**
- * Parses a PBKDF2 password and returns a string object
+ * Parses a PBKDF2 object and returns a string object
  * 
- * @param password   Password to parse
- * @returns          @String Stringified value of the password
+ * @param object   Object to parse
+ * @returns        @String Stringified value of the object
  */
-const parsePBKDF2 = (password: object): string => password + "";
+const parsePBKDF2 = (object: object): string => object + "";
 
 /**
  * Generates a random string of {@param length} length

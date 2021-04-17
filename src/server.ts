@@ -1,3 +1,5 @@
+import 'module-alias/register';
+
 import http from "http";
 import path from "path";
 
@@ -8,11 +10,11 @@ import favicon from "serve-favicon";
 import compression from "compression";
 import helmet from "helmet";
 
-import cors from "./common/cors";
-import errorHandler from "./common/errorHandler";
+import cors from "$common/cors";
+import errorHandler from "$common/errorHandler";
 
-import config from "./config/config";
-import logger from "./config/logger";
+import config from "$config/config";
+import logger from "$config/logger";
 
 import primary from "./routes/primary";
 import api_v1_0 from "./api/v1.0/api";

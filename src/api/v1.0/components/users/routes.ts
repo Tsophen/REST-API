@@ -1,9 +1,11 @@
 import { Router } from "express";
 
-import { ACTION, RESOURCE } from "../../../../config/permissions";
+import { ACTION, RESOURCE } from "$config/permissions";
 
-import { Authorization } from "../../middleware/Authorization";
+import { Authorization } from "$api/v1.0/middleware/Authorization";
 import { UsersController } from "./controller";
+
+import { UsersVaultRoutes } from "./_child/vault/routes";
 
 export class UsersRoutes {
   private readonly authorization: Authorization = new Authorization();
@@ -65,6 +67,6 @@ export class UsersRoutes {
    * Explanation: router.<METHOD>(<ENDPOINT>, [...<MIDDLEWARES>], <HANDLER>)
    */
   private initChildRoutes(): void {
-    
+    this.router.use("/vault/", new UsersVaultRoutes().router);
   }
 }

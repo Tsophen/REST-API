@@ -1,6 +1,6 @@
 import mongoose, { Model } from "mongoose";
 
-import { emailRegex, fullNameRegex } from "../../../../config/global";
+import { emailRegex, fullNameRegex } from "$config/global";
 
 /**
  * The User Schema in MongoDB
@@ -80,6 +80,4 @@ export interface IUser extends mongoose.Document {
     modifiedAt?: Date
 }
 
-const User: Model<IUser> = mongoose.model("User", userSchema, "users");
-
-export default User;
+export default mongoose.model("User", userSchema, "users");

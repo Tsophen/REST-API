@@ -4,10 +4,13 @@
     "module": "commonjs",
 
     "outDir": "./dist",
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@config": ["./src/config/*"],
-      "@common": ["./src/common/*"],
+      "$config/*": ["src/config/*"],
+      "$common/*": ["src/common/*"],
+
+      "$api/v1.0/*": ["src/api/v1.0/*"],
+      "$api/v1.0/users/*": ["src/api/v1.0/components/users/*"],
     },
 
     "strict": true,

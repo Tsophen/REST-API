@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import { Authorization } from "../../middleware/Authorization";
+import { Authorization } from "$api/v1.0/middleware/Authorization";
 import { AuthController } from "./controller";
 
 export class AuthRoutes {

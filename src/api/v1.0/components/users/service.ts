@@ -1,6 +1,6 @@
-import { randomString } from "../../../../config/global";
+import { randomString } from "$config/global";
 
-import User, { IUser } from "./model";
+import User, { IUser } from "$api/v1.0/users/model";
 
 export class UsersService {
   /**
@@ -68,12 +68,7 @@ export class UsersService {
           vaultKey: vaultKey,
           reminder: reminder,
           name: name,
-          vault: {
-            passwords: "",
-            notes: "",
-            settings: "",
-            personal: ""
-          },
+          vault: {},
           permissionLevel: 1
         });
 
@@ -89,12 +84,12 @@ export class UsersService {
    * 
    * @param usedId             Id of the user to update
    * @param updateOperations   An IUser object with new data to set
-   * @returns                  Promise of an (update) user/an error 
+   * @returns                  Promise of a (updated) user/an error 
    */
   public updateUser(userId: string, updateOperations: IUser): Promise<IUser | Error> {
     return new Promise(async (resolve, reject) => {
       try {
-        const updatedUser = await User.findOneAndUpdate({ _id: userId }, { $set: updateOperations }).exec();
+        const updatedUser = await User.findOneAndUpdate({ _id: userId }, { $set: updateOperations }, { new: true }).exec();
 
         if(!updatedUser)
           return reject(new Error("Couldn't find any user with the given id"));
@@ -110,7 +105,7 @@ export class UsersService {
    * Deletes an existing user
    * 
    * @param usedId   Id of the user to delete
-   * @returns        Promise of an (update) user/an error 
+   * @returns        Promise of a (deleted) user/an error 
    */
   public deleteUser(userId: string): Promise<IUser | Error> {
     return new Promise(async (resolve, reject) => {

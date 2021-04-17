@@ -1,5 +1,4 @@
-import { response } from "express";
-import User from "../api/v1.0/components/users/model";
+import User from "$api/v1.0/components/users/model";
 
 enum ROLE {
   ADMIN = 10,
@@ -19,7 +18,8 @@ enum ACTION {
   READ_ALL,
   READ_ONE,
   UPDATE_ALL_FIELDS,
-  DELETE_ONE
+  DELETE_ONE,
+  UPDATE_ONE
 }
 
 class Permission {
@@ -39,6 +39,7 @@ const permissions: Array<Permission> = [
   new Permission(RESOURCE.users, ACTION.READ_ONE, ROLE.ADMIN),
   new Permission(RESOURCE.users, ACTION.UPDATE_ALL_FIELDS, ROLE.ADMIN),
   new Permission(RESOURCE.users, ACTION.DELETE_ONE, ROLE.ADMIN),
+  new Permission(RESOURCE.users, ACTION.UPDATE_ONE, ROLE.DEFAULT),
 ]
 
 /**

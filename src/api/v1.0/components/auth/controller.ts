@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 
-import logger from "../../../../config/logger";
-import { messages } from "../../../../config/global";
-import { createResponse } from "../../../../config/response";
+import logger from "$config/logger";
+import { messages } from "$config/global";
+import { createResponse } from "$config/response";
 
 import { AuthService } from "./service";
 

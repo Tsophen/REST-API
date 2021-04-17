@@ -22,17 +22,46 @@
   ],
   "security": [
     {
-      "JWT": []
+      "API-KEY": []
     }
   ],
   "paths": {
-    "/users/signup": {
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Loads data of all users",
+        "operationId": "Load Users",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Loaded Users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/load-all"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
       "post": {
         "tags": [
           "Users"
         ],
-        "description": "Registers a user",
-        "operationId": "Sign Up",
+        "description": "Creates a user",
+        "operationId": "Create User",
         "security": [],
         "parameters": [
           {
@@ -78,7 +107,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/signup"
+                  "$ref": "#/components/schemas/create"
                 }
               }
             }
@@ -95,126 +124,12 @@
         }
       }
     },
-    "/users/login": {
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "description": "Generates a Json Web Token",
-        "operationId": "Generate JWT",
-        "security": [],
-        "parameters": [
-          {
-            "type": "object",
-            "name": "email",
-            "in": "query",
-            "description": "Email address of the user",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "type": "object",
-            "name": "password",
-            "in": "query",
-            "description": "PBKDF2 Encrypted password of the user",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Logged In",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/login"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/users/otp": {
-      "post": {
-        "tags": [
-          "Users"
-        ],
-        "description": "Generates a One Time Password",
-        "operationId": "Generate OTP",
-        "security": [],
-        "parameters": [
-          {
-            "type": "object",
-            "name": "email",
-            "in": "query",
-            "description": "Email address of the user",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "type": "object",
-            "name": "password",
-            "in": "query",
-            "description": "PBKDF2 Encrypted password of the user",
-            "required": true,
-            "style": "form",
-            "explode": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Created OTP",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/otp"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/users/:userId": {
       "get": {
         "tags": [
           "Users"
         ],
-        "description": "Loads general information of a user",
+        "description": "Loads data of a user",
         "operationId": "Load User",
         "parameters": [],
         "responses": {
@@ -238,19 +153,90 @@
             "description": "Internal Server Error"
           }
         }
-      }
-    },
-    "/users/load/vault/:userId": {
-      "get": {
+      },
+      "put": {
         "tags": [
           "Users"
         ],
-        "description": "Loads a user's encrypted vault",
+        "description": "Updates a user",
+        "operationId": "Update User",
+        "parameters": [
+          {
+            "type": "object",
+            "name": "<parameter>",
+            "in": "query",
+            "description": "parameter",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "any"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/update"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "description": "Deletes a user",
+        "operationId": "Delete User",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": "Deleted user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/delete"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/vault/": {
+      "get": {
+        "tags": [
+          "Users/Vault"
+        ],
+        "description": "Loads a user's vault",
         "operationId": "Load User's Vault",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Loaded User",
+            "description": "Loaded User's Vault",
             "content": {
               "application/json": {
                 "schema": {
@@ -269,28 +255,26 @@
             "description": "Internal Server Error"
           }
         }
-      }
-    },
-    "/users/update/vault/:userId": {
+      },
       "patch": {
         "tags": [
-          "Users"
+          "Users/Vault"
         ],
         "description": "Updates a user's vault",
         "operationId": "Update User's Vault",
         "parameters": [
           {
             "type": "object",
-            "name": "properties",
+            "name": "vault",
             "in": "query",
-            "description": "Properties to update",
+            "description": "Encrypted vault",
             "required": true,
             "style": "form",
             "explode": true,
             "schema": {
               "type": "object",
               "example": {
-                "vault": "encrypted value value"
+                "vault": "<encrypted vault>"
               }
             }
           }
@@ -318,31 +302,125 @@
         }
       }
     },
-    "/users/verification/email/:authToken": {
-      "get": {
+    "/auth/access-token": {
+      "post": {
         "tags": [
-          "Users"
+          "Auth"
         ],
-        "description": "Verifies an email address",
-        "operationId": "verify Email",
+        "description": "Generates an Access-Token",
+        "operationId": "Generate Access Token",
         "security": [],
-        "parameters": [],
+        "parameters": [
+          {
+            "type": "object",
+            "name": "email",
+            "in": "query",
+            "description": "Email address of the user",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "object",
+            "name": "password",
+            "in": "query",
+            "description": "PBKDF2 Encrypted password of the user",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "object",
+            "name": "refresh-token",
+            "in": "query",
+            "description": "A Refresh Token",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Verified Email Address",
+            "description": "Created Access Token",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/verifyemail"
+                  "$ref": "#/components/schemas/auth-access-token"
                 }
               }
             }
           },
+          "400": {
+            "description": "Bad Request"
+          },
           "403": {
             "description": "Forbidden"
           },
-          "404": {
-            "description": "Not Found"
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/auth/refresh-token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Generates a Refresh-Token",
+        "operationId": "Generate Refresh Token",
+        "security": [],
+        "parameters": [
+          {
+            "type": "object",
+            "name": "email",
+            "in": "query",
+            "description": "Email address of the user",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "type": "object",
+            "name": "password",
+            "in": "query",
+            "description": "PBKDF2 Encrypted password of the user",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Created Refresh Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/auth-refresh-token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "500": {
             "description": "Internal Server Error"
@@ -353,7 +431,7 @@
   },
   "components": {
     "securitySchemes": {
-      "JWT": {
+      "API-KEY": {
         "type": "apiKey",
         "name": "Authorization",
         "in": "header",
@@ -361,7 +439,44 @@
       }
     },
     "schemas": {
-      "signup": {
+      "load-all": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Successfully loaded all users"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "user1": {
+                "id": "14kda75ladh85ba36nda12maj42ka3k4",
+                "email": "example1@example.com",
+                "emailVerificationToken": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw",
+                "name": "John Doe"
+              },
+              "user2": {
+                "id": "14kda75ladh85ba36nda12maj42ka3k4",
+                "email": "example2@example.com",
+                "emailVerificationToken": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw",
+                "name": "John Doe"
+              },
+              "user3": {
+                "id": "14kda75ladh85ba36nda12maj42ka3k4",
+                "email": "example3@example.com",
+                "emailVerificationToken": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw",
+                "name": "John Doe"
+              }
+            }
+          }
+        },
+        "description": "Load-All Schema"
+      },
+      "create": {
         "type": "object",
         "properties": {
           "success": {
@@ -375,70 +490,16 @@
           "data": {
             "type": "object",
             "example": {
-              "createdUser": {
-                "id": "14kda75ladh85ba36nda12maj42ka3k4",
-                "email": "example@example.com",
-                "emailVerificationToken": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw",
-                "name": "John Doe",
-                "request": {
-                  "type": "GET",
-                  "url": "https://api.domain.com/v1.0/users/14kda75ladh85ba36nda12maj42ka3k4"
-                },
-                "token": "opUJIIt8ypqHc7ckyhyoe3aS1BcjreOuz5Owuo3QmoYgjwFL1I2i14jTenCiW7ZUOBkB1jWR65hV9E2BIom6gOWus3Gb92WiC3dcQy4Ur5B7X19KtAtrDW"
-              }
+              "id": "14kda75ladh85ba36nda12maj42ka3k4",
+              "email": "example@example.com",
+              "emailVerificationToken": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw",
+              "name": "John Doe"
             }
           }
         },
-        "description": "Signup Schema"
+        "description": "Create Schema"
       },
-      "login": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean",
-            "example": true
-          },
-          "message": {
-            "type": "string",
-            "example": "Successfully authenticated"
-          },
-          "data": {
-            "type": "object",
-            "example": {
-              "loadedUser": {
-                "id": "14kda75ladh85ba36nda12maj42ka3k4",
-                "email": "example@example.com",
-                "request": {
-                  "type": "GET",
-                  "url": "https://api.domain.com/v1.0/users/14kda75ladh85ba36nda12maj42ka3k4"
-                },
-                "token": "opUJIIt8ypqHc7ckyhyoe3aS1BcjreOuz5Owuo3QmoYgjwFL1I2i14jTenCiW7ZUOBkB1jWR65hV9E2BIom6gOWus3Gb92WiC3dcQy4Ur5B7X19KtAtrDW"
-              }
-            }
-          }
-        },
-        "description": "Login Schema"
-      },
-      "otp": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean",
-            "example": true
-          },
-          "message": {
-            "type": "string",
-            "example": "Successfully created an OTP"
-          },
-          "data": {
-            "type": "object",
-            "example": {
-              "otp": "opUJIIt8ypqHc7ckyhyoe3aS1BcjreOuz5Owuo3QmoYgjwFL1I2i14jTenCiW7ZUOBkB1jWR65hV9E2BIom6gOWus3Gb92WiC3dcQy4Ur5B7X19KtAtrDW"
-            }
-          }
-        },
-        "description": "OTP Schema"
-      },
+
       "load": {
         "type": "object",
         "properties": {
@@ -453,17 +514,45 @@
           "data": {
             "type": "object",
             "example": {
-              "loadedUser": {
-                "id": "14kda75ladh85ba36nda12maj42ka3k4",
-                "email": "example@example.com",
-                "emailVerificationToken": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw",
-                "name": "John Doe"
-              }
+              "id": "14kda75ladh85ba36nda12maj42ka3k4",
+              "email": "example@example.com",
+              "emailVerificationToken": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw",
+              "name": "John Doe"
             }
           }
         },
         "description": "Load Schema"
       },
+      "update": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Successfully updated user"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "id": "14kda75ladh85ba36nda12maj42ka3k4",
+              "email": "example@example.com",
+              "emailVerificationToken": "CscnZLCqKblP99iVoBR7BGYICmKsWKIWVt63xFU8iAz7wEIgFIkVEj70LXQz14Km2cXQXewOtsqmFSdDe2ZuGV4BrIqyuz1OnW1XJA0FCKkzMFrWTx2JNw",
+              "name": "John Doe"
+            }
+          }
+        },
+        "description": "Update Schema"
+      },
+      "delete": {
+        "type": "object",
+        "properties": {
+        },
+        "description": "Delete Schema"
+      },
+
       "loadvault": {
         "type": "object",
         "properties": {
@@ -504,7 +593,9 @@
         },
         "description": "Load vault Schema"
       },
-      "verifyemail": {
+
+
+      "auth-access-token": {
         "type": "object",
         "properties": {
           "success": {
@@ -513,18 +604,36 @@
           },
           "message": {
             "type": "string",
-            "example": "Successfully verified email"
+            "example": "Successfully created Access Token"
           },
           "data": {
             "type": "object",
             "example": {
-              "user": {
-                "email": "example@example.com"
-              }
+              "access-token": "opUJIIt8ypqHc7ckyhyoe3aS1BcjreOuz5Owuo3QmoYgjwFL1I2i14jTenCiW7ZUOBkB1jWR65hV9E2BIom6gOWus3Gb92WiC3dcQy4Ur5B7X19KtAtrDW"
             }
           }
         },
-        "description": "Verify email"
+        "description": "Access Token"
+      },
+      "auth-refresh-token": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "example": "Successfully created Refresh Token"
+          },
+          "data": {
+            "type": "object",
+            "example": {
+              "refresh-token": "opUJIIt8ypqHc7ckyhyoe3aS1BcjreOuz5Owuo3QmoYgjwFL1I2i14jTenCiW7ZUOBkB1jWR65hV9E2BIom6gOWus3Gb92WiC3dcQy4Ur5B7X19KtAtrDW"
+            }
+          }
+        },
+        "description": "Refresh Token"
       }
     }
   }
