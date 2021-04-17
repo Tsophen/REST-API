@@ -24,6 +24,14 @@ export class UsersVaultRoutes {
    * Explanation: router.<METHOD>(<ENDPOINT>, [...<MIDDLEWARES>], <HANDLER>)
    */
   private initRoutes(): void {
+    
+    /** Update user's vault */
+    this.router.get("/",
+      this.authorization.checkAccessToken,
+      (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.LOAD_ONE),
+      this.controller.getVault.bind(this.controller)
+    );
+
     /** Update user's vault */
     this.router.patch("/",
       this.authorization.checkAccessToken,

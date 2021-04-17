@@ -435,7 +435,7 @@
         "type": "apiKey",
         "name": "Authorization",
         "in": "header",
-        "description": "A Json Web Token with a lifetime of 1 hour. Can be obtained by registering a new user or logging in with an existing user."
+        "description": "An Access Token with a lifetime of 5 minutes. Can be obtained by sending a post request to /auth/access-token."
       }
     },
     "schemas": {

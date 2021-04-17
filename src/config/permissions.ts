@@ -1,4 +1,4 @@
-import User from "$api/v1.0/components/users/model";
+import User, { IUser } from "$api/v1.0/components/users/model";
 
 enum ROLE {
   ADMIN = 10,
@@ -19,6 +19,7 @@ enum ACTION {
   READ_ONE,
   UPDATE_ALL_FIELDS,
   DELETE_ONE,
+  LOAD_ONE,
   UPDATE_ONE
 }
 
@@ -39,6 +40,7 @@ const permissions: Array<Permission> = [
   new Permission(RESOURCE.users, ACTION.READ_ONE, ROLE.ADMIN),
   new Permission(RESOURCE.users, ACTION.UPDATE_ALL_FIELDS, ROLE.ADMIN),
   new Permission(RESOURCE.users, ACTION.DELETE_ONE, ROLE.ADMIN),
+  new Permission(RESOURCE.users, ACTION.LOAD_ONE, ROLE.DEFAULT),
   new Permission(RESOURCE.users, ACTION.UPDATE_ONE, ROLE.DEFAULT),
 ]
 
@@ -59,7 +61,7 @@ async function hasPermission(userId: string, resource: RESOURCE, action: ACTION)
     if(!requiredPermissionLevel) return reject(new Error("Can't load the required permission level"));
 
     try {
-      const user = await User.findById(userId).exec();
+      const user = <IUser> await User.findById(userId).exec();
 
       if(!user || !user.permissionLevel)
         return reject(new Error("Couldn't load user's permissions"));

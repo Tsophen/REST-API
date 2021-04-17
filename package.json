@@ -7,7 +7,8 @@
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "dev": "nodemon src/server.ts --watch ./src",
-    "dev-build": "nodemon dist/server.js --watch ./src"
+    "dev-build": "nodemon dist/server.js --watch ./src",
+    "prod": "node dist/server.js"
   },
   "keywords": [
     "startup",
@@ -30,7 +31,7 @@
     "nodemon": "^2.0.7"
   },
   "dependencies": {
-    "@lielamar/logger": "^1.0.6",
+    "@lielamar/logger": "^1.0.7",
     "compression": "^1.7.4",
     "crypto": "^1.0.1",
     "dotenv": "^8.2.0",

@@ -7,7 +7,7 @@ import { createResponse } from "$config/response";
 import { emailRegex, messages, parsePBKDF2, validatePBKDF2 } from "$config/global";
 import { RESOURCE, ACTION, hasPermission } from '$config/permissions';
 
-import User from "$api/v1.0/components/users/model"
+import User, { IUser } from "$api/v1.0/components/users/model"
 
 export class Authorization {
   /**
@@ -30,7 +30,7 @@ export class Authorization {
       return res.status(500).json(createResponse(false, messages.internalServerError));
 
     try {
-      const user = await User.findOne({ email }).exec();
+      const user = <IUser> await User.findOne({ email }).exec();
 
       if(!user)
         return res.status(400).json(createResponse(false, messages.invalidCredentials));

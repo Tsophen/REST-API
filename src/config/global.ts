@@ -48,6 +48,8 @@ const messages = {
   successfullyCreatedAccessToken: "Successfully created Access Token",
   successfullyCreatedRefreshToken: "Successfully created Refresh Token",
 
+  successfullyLoadedVault: "Successfully loaded vault",
+
   missingAuthorizationHeader: "Missing authorization header",
   missingOneOrMoreFields: "Missing one of more fields [keys]",
   submittedSuspiciousData: "You submitted data that our system found suspicious. If you think what you did should have worked, please contact us",
@@ -64,6 +66,8 @@ const messages = {
   failedToCreateAccessToken: "Failed to create Access Token",
   failedToCreateRefreshToken: "Failed to create Refresh Token",
   
+  failedToLoadVault: "Failed to load vault",
+
   invalidCredentials: "Invalid credentials",
   invalidEmail: "Invalid email",
   invalidFullName: "Invalid full name",
