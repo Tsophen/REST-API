@@ -1,3 +1,5 @@
+const __brand__ = "Tsophen";
+
 const __prod__ = process.env.NODE_ENV === "production";
 
 const emailRegex = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
@@ -81,6 +83,7 @@ const messages = {
 }
 
 export {
+  __brand__,
   __prod__,
   emailRegex,
   fullNameRegex,

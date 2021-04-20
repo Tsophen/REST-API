@@ -16,7 +16,7 @@ export class Authorization {
    * 
    * @returns <Optional> Response if the authorization token was declined 
    */
-  public async checkLoginDetails(req: Request, res: Response, next: NextFunction) {
+  public async checkCredentials(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body;
 
     if(!email || !password)
@@ -56,13 +56,52 @@ export class Authorization {
   }
 
   /**
+   * A middleware function to checks the access token included in the headers of the request
+   * If the token verifies successfully, we call the #next function to continue the request
+   * 
+   * @returns <Optional> Response if the access token was declined 
+   */
+  public async checkAccessToken(req: Request, res: Response, next: NextFunction) {
+    if(!process.env.JWT_ACCESS_SECRET)
+      return res.status(500).json(createResponse(false, messages.internalServerError));
+
+    try {
+      let token = req.headers["x-token"];
+
+      if(!token)
+        return res.status(400).json(createResponse(false, messages.missingAuthorizationHeader));
+
+      token = (<string>token).split(" ")[1];
+
+      jwt.verify(token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
+        if(err) {
+          logger.error(err.message, err);
+    
+          return res.status(403).json(createResponse(false, messages.failedToAuthenticate));
+        } else if(!decoded) {
+          logger.error("Could not get the decoded version of the access token");
+    
+          return res.status(403).json(createResponse(false, messages.failedToAuthenticate));
+        }
+    
+        req.userId = (<any>decoded).id;
+        next();
+      });
+    } catch(exception) {
+      logger.error(exception);
+        
+      return res.status(403).json(createResponse(false, messages.failedToAuthenticate));
+    }
+  }
+
+  /**
    * A middleware function to checks the refresh token included in the headers of the request
    * If the token verifies successfully, we call the #next function to continue the request
    * 
    * @returns <Optional> Response if the refresh token was declined 
    */
   public async checkRefreshToken(req: Request, res: Response, next: NextFunction) {
-    const { refreshToken } = req.body;
+    const refreshToken = req.headers["x-refresh-token"];
 
     if(!refreshToken)
       return res.status(400).json(createResponse(false, messages.missingOneOrMoreFields));
@@ -93,60 +132,6 @@ export class Authorization {
         
       return res.status(403).json(createResponse(false, messages.failedToAuthenticate));
     }
-  }
-
-  /**
-   * A middleware function to checks the access token included in the headers of the request
-   * If the token verifies successfully, we call the #next function to continue the request
-   * 
-   * @returns <Optional> Response if the access token was declined 
-   */
-  public async checkAccessToken(req: Request, res: Response, next: NextFunction) {
-    if(!process.env.JWT_ACCESS_SECRET)
-      return res.status(500).json(createResponse(false, messages.internalServerError));
-
-    try {
-      if(!req.headers.authorization)
-        return res.status(400).json(createResponse(false, messages.missingAuthorizationHeader));
-
-      const token = req.headers.authorization.split(" ")[1];
-
-      jwt.verify(token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
-        if(err) {
-          logger.error(err.message, err);
-    
-          return res.status(403).json(createResponse(false, messages.failedToAuthenticate));
-        } else if(!decoded) {
-          logger.error("Could not get the decoded version of the access token");
-    
-          return res.status(403).json(createResponse(false, messages.failedToAuthenticate));
-        }
-    
-        req.userId = (<any>decoded).id;
-        next();
-      });
-    } catch(exception) {
-      logger.error(exception);
-        
-      return res.status(403).json(createResponse(false, messages.failedToAuthenticate));
-    }
-  }
-
-  /**
-   * A middleware function to check one of the 2: Login Details or Refresh Token.
-   * If email or password exist we call #checkLoginDetails, if refreshToken exists we call #checkRefreshToken, else we return an error
-   * 
-   * @returns <Optional> Response if neither of the above were called
-   */
-  public async checkLoginDetailsOrRefreshToken(req: Request, res: Response, next: NextFunction) {
-    const { email, password, refreshToken } = req.body;
-
-    if(email || password)
-      await this.checkLoginDetails(req, res, next);
-    else if(refreshToken)
-      await this.checkRefreshToken(req, res, next);
-    else
-      return res.status(400).json(createResponse(false, messages.missingOneOrMoreFields));
   }
 
   /**

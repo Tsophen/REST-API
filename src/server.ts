@@ -6,7 +6,6 @@ import path from "path";
 import express from "express";
 import mongoose from "mongoose";
 
-import favicon from "serve-favicon";
 import compression from "compression";
 import helmet from "helmet";
 
@@ -38,7 +37,6 @@ router.use((req, res, next) => {
 });
 
 /** Configuring Express & Applying CORS */
-router.use(favicon(path.join(__dirname, "..", "public", "images", "favicon.ico")));
 router.use(express.static(path.join(__dirname, "..", "public")));
 router.use(express.urlencoded({ extended: false }));
 router.use(express.json());

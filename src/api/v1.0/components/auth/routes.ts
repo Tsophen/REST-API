@@ -23,16 +23,16 @@ export class AuthRoutes {
    * Explanation: router.<METHOD>(<ENDPOINT>, [...<MIDDLEWARES>], <HANDLER>)
    */
   private initRoutes(): void {
-    /** Creates an access token */
-    this.router.post("/access-token",
-      this.authorization.checkLoginDetailsOrRefreshToken.bind(this.authorization),
-      this.controller.createAccessToken.bind(this.controller)
+    /** Logs in with credentials and creates access & refresh tokens */
+    this.router.post("/login",
+      this.authorization.checkCredentials,
+      this.controller.createTokens.bind(this.controller)
     );
 
-    /** Creates a refresh token */
-    this.router.post("/refresh-token",
-      this.authorization.checkLoginDetails,
-      this.controller.createRefreshToken.bind(this.controller)
+    /** Creates access & refresh tokens */
+    this.router.get("/refresh-token",
+      this.authorization.checkRefreshToken,
+      this.controller.createTokens.bind(this.controller)
     );
   }
 
@@ -41,7 +41,5 @@ export class AuthRoutes {
    * 
    * Explanation: router.<METHOD>(<ENDPOINT>, [...<MIDDLEWARES>], <HANDLER>)
    */
-  private initChildRoutes(): void {
-    
-  }
+  private initChildRoutes(): void {}
 }
