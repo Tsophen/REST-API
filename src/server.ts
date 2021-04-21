@@ -6,10 +6,11 @@ import path from "path";
 import express from "express";
 import mongoose from "mongoose";
 
+import cookieParser from "cookie-parser";
 import compression from "compression";
 import helmet from "helmet";
 
-import cors from "$common/cors";
+import corss from "$common/cors";
 import errorHandler from "$common/errorHandler";
 
 import config from "$config/config";
@@ -32,7 +33,7 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 /** Enabling the logger for every request */
 router.use((req, res, next) => {
   logger.info(`METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.ip}]`);
-  res.on("finish", () => logger.info(`METHOD: [${req.method}] - URL: [${req.url}] - IP: [${req.ip}] - STATUS: [${res.statusCode}]`));
+  res.on("finish", () => logger.info(`METHOD: [${req.method}] - URL: [${req.baseUrl}] - IP: [${req.ip}] - STATUS: [${res.statusCode}]`));
   next();
 });
 
@@ -40,14 +41,15 @@ router.use((req, res, next) => {
 router.use(express.static(path.join(__dirname, "..", "public")));
 router.use(express.urlencoded({ extended: false }));
 router.use(express.json());
+router.use(cookieParser());
 router.use(compression());
 router.use(helmet({ contentSecurityPolicy: false }));
 
-router.use(cors);
+router.use(corss);
 
 /** Routes to handle endpoints */
 router.use("/", primary);
-router.use("/api/v1.0/", api_v1_0);
+router.use("/v1.0/", api_v1_0);
 
 /** Applying the error handler to handle every request that was not solved by this point */
 router.use(errorHandler);

@@ -13,13 +13,25 @@ export class UsersRoutes {
   private readonly _router: Router = Router();
 
   public constructor() {
-    this.initRoutes();
+    // Initializing child routes first to handle specific GET requests before a user GET request.
+    // If we initialized main routes first, requesting "GET api.tsophen.com/v1.0/users/vault" with an access token
+    // would return permission denied because it'll try to load the whole user with the ID of vault.
     this.initChildRoutes();
+    this.initRoutes();
   }
 
   public get router(): Router {
 		return this._router;
 	}
+
+  /**
+   * Initializing all child routes of the user component
+   * 
+   * Explanation: router.<METHOD>(<ENDPOINT>, [...<MIDDLEWARES>], <HANDLER>)
+   */
+   private initChildRoutes(): void {
+    this.router.use("/vault/", new UsersVaultRoutes().router);
+  }
 
   /**
    * Initializing all routes of the user component
@@ -30,14 +42,14 @@ export class UsersRoutes {
     /** Retrieve all users */
     this.router.get("/",
       this.authorization.checkAccessToken,
-      (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.READ_ALL),
+      (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.READ_ALL_INSTANCES),
       this.controller.readUsers.bind(this.controller)
     );
   
     /** Retrieve specific user */
     this.router.get("/:userId",
       this.authorization.checkAccessToken,
-      (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.READ_ONE),
+      (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.READ_ONE_INSTANCE),
       this.controller.readUser.bind(this.controller)
     );
 
@@ -56,17 +68,8 @@ export class UsersRoutes {
     /** Delete user */
     this.router.delete("/:userId",
       this.authorization.checkAccessToken,
-      (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.DELETE_ONE),
+      (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.DELETE_ONE_INSTANCE),
       this.controller.deleteUser.bind(this.controller)
     );
-  }
-
-  /**
-   * Initializing all child routes of the user component
-   * 
-   * Explanation: router.<METHOD>(<ENDPOINT>, [...<MIDDLEWARES>], <HANDLER>)
-   */
-  private initChildRoutes(): void {
-    this.router.use("/vault/", new UsersVaultRoutes().router);
   }
 }

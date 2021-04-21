@@ -29,8 +29,9 @@ export class AuthController {
 
       logger.info(`Successfully created access & refresh tokens for user ${req.userId}`);
 
-      res.cookie("refreshToken", refreshToken, { maxAge: (7 * 24 * 60 * 60 * 1000), path: "/", httpOnly: true, secure: true, sameSite: true });
-      return res.status(200).json(createResponse(true, messages.successfullyCreatedAccessToken, { accessToken: accessToken}));
+      // TODO: change secure to: true
+      res.cookie("refreshToken", refreshToken, { maxAge: (7 * 24 * 60 * 60 * 1000), path: "/", httpOnly: true, secure: false, sameSite: true });
+      return res.status(200).json(createResponse(true, messages.successfullyCreatedAccessToken, { accessToken: accessToken }));
     } catch(exception) {
       logger.error(exception.message, exception);
 

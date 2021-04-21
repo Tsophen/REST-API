@@ -60,7 +60,7 @@ export class UsersService {
 
         if(exsitingUser)
           return reject(new Error("User with the provided email already exists!"));
-        
+
         const newUser = new User({
           email: email,
           verified: false,
@@ -68,7 +68,6 @@ export class UsersService {
           vaultKey: vaultKey,
           reminder: reminder,
           name: name,
-          vault: {},
           permissionLevel: 1
         });
 

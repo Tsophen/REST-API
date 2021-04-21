@@ -9,13 +9,20 @@ export class AuthRoutes {
   private readonly _router: Router = Router();
 
   public constructor() {
-    this.initRoutes();
     this.initChildRoutes();
+    this.initRoutes();
   }
 
   public get router(): Router {
 		return this._router;
 	}
+
+  /**
+   * Initializing all child routes of the auth component
+   * 
+   * Explanation: router.<METHOD>(<ENDPOINT>, [...<MIDDLEWARES>], <HANDLER>)
+   */
+   private initChildRoutes(): void {}
 
   /**
    * Initializing all routes of the auth component
@@ -35,11 +42,4 @@ export class AuthRoutes {
       this.controller.createTokens.bind(this.controller)
     );
   }
-
-  /**
-   * Initializing all child routes of the auth component
-   * 
-   * Explanation: router.<METHOD>(<ENDPOINT>, [...<MIDDLEWARES>], <HANDLER>)
-   */
-  private initChildRoutes(): void {}
 }

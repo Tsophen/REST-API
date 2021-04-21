@@ -52,13 +52,14 @@ const userSchema = new mongoose.Schema({
     },
     vault: {
         type: Object,
-        required: true
+        required: true,
+        default: {},
     },
     permissionLevel: {
         type: Number,
         required: true
     }
-}, {timestamps: true});
+}, {minimize: false, timestamps: true});
 
 /**
  * An interface with the same properties as the Schema to refer to the user

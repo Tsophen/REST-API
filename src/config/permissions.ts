@@ -15,12 +15,12 @@ enum RESOURCE {
 }
 
 enum ACTION {
-  READ_ALL,
-  READ_ONE,
+  READ_ALL_INSTANCES,
+  READ_ONE_INSTANCE,
+  DELETE_ONE_INSTANCE,
   UPDATE_ALL_FIELDS,
-  DELETE_ONE,
-  LOAD_ONE,
-  UPDATE_ONE
+  UPDATE_ONE_FIELD,
+  READ_ONE_FIELD
 }
 
 class Permission {
@@ -36,12 +36,12 @@ class Permission {
 }
 
 const permissions: Array<Permission> = [
-  new Permission(RESOURCE.users, ACTION.READ_ALL, ROLE.ADMIN),
-  new Permission(RESOURCE.users, ACTION.READ_ONE, ROLE.ADMIN),
+  new Permission(RESOURCE.users, ACTION.READ_ALL_INSTANCES, ROLE.ADMIN),
+  new Permission(RESOURCE.users, ACTION.READ_ONE_INSTANCE, ROLE.ADMIN),
+  new Permission(RESOURCE.users, ACTION.DELETE_ONE_INSTANCE, ROLE.ADMIN),
   new Permission(RESOURCE.users, ACTION.UPDATE_ALL_FIELDS, ROLE.ADMIN),
-  new Permission(RESOURCE.users, ACTION.DELETE_ONE, ROLE.ADMIN),
-  new Permission(RESOURCE.users, ACTION.LOAD_ONE, ROLE.DEFAULT),
-  new Permission(RESOURCE.users, ACTION.UPDATE_ONE, ROLE.DEFAULT),
+  new Permission(RESOURCE.users, ACTION.UPDATE_ONE_FIELD, ROLE.DEFAULT),
+  new Permission(RESOURCE.users, ACTION.READ_ONE_FIELD, ROLE.DEFAULT),
 ]
 
 /**

@@ -101,7 +101,7 @@ export class Authorization {
    * @returns <Optional> Response if the refresh token was declined 
    */
   public async checkRefreshToken(req: Request, res: Response, next: NextFunction) {
-    const refreshToken = req.headers["x-refresh-token"];
+    const refreshToken = req.cookies.refreshToken;
 
     if(!refreshToken)
       return res.status(400).json(createResponse(false, messages.missingOneOrMoreFields));
@@ -153,7 +153,7 @@ export class Authorization {
     } catch (exception) {
       console.log(exception);
 
-      return res.status(500).json(createResponse(false, messages.forbidden));
+      return res.status(403).json(createResponse(false, messages.forbidden));
     }
   }
 }

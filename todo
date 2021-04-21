@@ -1,0 +1,1 @@
+1. Benchmark redis vs pbkdf2. If redis is faster cache hashed passwords.

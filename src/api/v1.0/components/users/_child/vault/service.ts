@@ -15,6 +15,8 @@ export class UsersVaultService {
         if(!user)
           return reject(new Error("Couldn't find any user with the given id"));
         
+        console.log(user);
+
         if(!user.vault)
           return reject(new Error("Couldn't load user's vault"));
 

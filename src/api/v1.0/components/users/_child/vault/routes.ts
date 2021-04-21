@@ -28,14 +28,14 @@ export class UsersVaultRoutes {
     /** Update user's vault */
     this.router.get("/",
       this.authorization.checkAccessToken,
-      (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.LOAD_ONE),
+      (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.READ_ONE_FIELD),
       this.controller.getVault.bind(this.controller)
     );
 
     /** Update user's vault */
     this.router.patch("/",
       this.authorization.checkAccessToken,
-      (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.UPDATE_ONE),
+      (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.UPDATE_ONE_FIELD),
       this.controller.updateVault.bind(this.controller)
     );
   }

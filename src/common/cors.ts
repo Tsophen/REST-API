@@ -1,9 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 
-const cors = (req: Request, res: Response, next: NextFunction) => {
-  res.header("Access-Control-Allow-Origin", "*");
+const corss = (req: Request, res: Response, next: NextFunction) => {
+  // TODO: add all domains
+  res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header("Access-Control-Expose-Headers", "Set-Cookie, Cookie");
   res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
-  res.header("Access-Control-Allow-Headers", "Accept, Authorization, Content-Type, X-Requested-With, Origin");
+  res.header("Access-Control-Allow-Headers", "Accept, X-Token, Content-Type, X-Requested-With, Origin, Cookie");
 
   if(req.method == "OPTIONS")
     return res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT").status(200).json({});
@@ -11,4 +14,4 @@ const cors = (req: Request, res: Response, next: NextFunction) => {
   return next();
 }
 
-export default cors;
+export default corss;
