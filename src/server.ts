@@ -10,7 +10,7 @@ import cookieParser from "cookie-parser";
 import compression from "compression";
 import helmet from "helmet";
 
-import corss from "$common/cors";
+import cors from "$common/cors";
 import errorHandler from "$common/errorHandler";
 
 import config from "$config/config";
@@ -45,7 +45,7 @@ router.use(cookieParser());
 router.use(compression());
 router.use(helmet({ contentSecurityPolicy: false }));
 
-router.use(corss);
+router.use(cors);
 
 /** Routes to handle endpoints */
 router.use("/", primary);

@@ -10,21 +10,21 @@ export class UsersVaultController {
   private readonly service: UsersVaultService = new UsersVaultService();
 
   /**
-   * Retrieves a user's vault
+   * Loads user's vault
    * 
    * @req    Request object
    * @res    Response object
    * @next   Next function
    * @return JSON response
    */
-  public async getVault(req: Request, res: Response, next: NextFunction) {
+  public async loadVault(req: Request, res: Response, next: NextFunction) {
     const userId = req.userId;
 
     if(!userId)
       return res.status(400).json(createResponse(false, messages.failedToAuthenticate));
 
     try {
-      const vault = await this.service.getUserVault(userId);
+      const vault = await this.service.loadUserVault(userId);
 
       logger.debug(`Successfully retrieved user ${userId}'s vault`, vault);
 
@@ -37,7 +37,7 @@ export class UsersVaultController {
   }
 
   /**
-   * Update a user's vault
+   * Updates user's vault
    * 
    * @req    Request object
    * @res    Response object

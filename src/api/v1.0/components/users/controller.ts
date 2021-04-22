@@ -12,16 +12,16 @@ export class UsersController {
   private readonly service: UsersService = new UsersService();
 
   /**
-   * Retrieves data on all users
+   * Loads all users
    * 
    * @req    Request object
    * @res    Response object
    * @next   Next function
    * @return JSON response
    */
-  public async readUsers(req: Request, res: Response, next: NextFunction) {
+  public async loadUsers(req: Request, res: Response, next: NextFunction) {
     try {
-      const users = await this.service.getUsers("_id email name");
+      const users = await this.service.loadUsers("_id email name");
 
       logger.debug(`Successfully retrieved information on all users`);
 
@@ -34,18 +34,18 @@ export class UsersController {
   }
 
   /**
-   * Retrieves data on a specific user
+   * Loads a specific user
    * 
    * @req    Request object
    * @res    Response object
    * @next   Next function
    * @return JSON response
    */
-  public async readUser(req: Request, res: Response, next: NextFunction) {
+  public async loadUser(req: Request, res: Response, next: NextFunction) {
     const { userId } = req.params;
 
     try {
-      const user = await this.service.getUser(userId, "_id email name")
+      const user = await this.service.loadUser(userId, "_id email name")
 
       logger.debug(`Successfully retrieved information on user ${userId}`);
 

@@ -4,11 +4,11 @@ import User, { IUser } from "$api/v1.0/users/model";
 
 export class UsersService {
   /**
-   * Retrieves data on all users
+   * Loads all users
    * 
    * @returns   Promise of a list of users/an error 
    */
-  public async getUsers(select?: string): Promise<IUser[] | Error> {
+  public async loadUsers(select?: string): Promise<IUser[] | Error> {
     return new Promise(async (resolve, reject) => {
       try {
         const users = await (select ? User.find().select(select) : User.find()).exec();
@@ -24,12 +24,12 @@ export class UsersService {
   }
 
   /**
-   * Retrieves data on a specific user
+   * Loads a specific user
    * 
    * @param userId   ID of the user to retrieve data on
    * @returns        Promise of a user/an error 
    */
-  public getUser(userId: string, select?: string): Promise<IUser | Error> {
+  public loadUser(userId: string, select?: string): Promise<IUser | Error> {
     return new Promise(async (resolve, reject) => {
       try {
         const user = await (select ? User.findById(userId).select(select) : User.findById(userId)).exec();

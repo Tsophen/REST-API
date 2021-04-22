@@ -39,33 +39,33 @@ export class UsersRoutes {
    * Explanation: router.<METHOD>(<ENDPOINT>, [...<MIDDLEWARES>], <HANDLER>)
    */
   private initRoutes(): void {
-    /** Retrieve all users */
+    /** Loads all users */
     this.router.get("/",
       this.authorization.checkAccessToken,
       (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.READ_ALL_INSTANCES),
-      this.controller.readUsers.bind(this.controller)
+      this.controller.loadUsers.bind(this.controller)
     );
   
-    /** Retrieve specific user */
+    /** Loads a specific user */
     this.router.get("/:userId",
       this.authorization.checkAccessToken,
       (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.READ_ONE_INSTANCE),
-      this.controller.readUser.bind(this.controller)
+      this.controller.loadUser.bind(this.controller)
     );
 
-    /** Create user */
+    /** Creates a new user */
     this.router.post("/",
       this.controller.createUser.bind(this.controller)
     );
 
-    /** Update user */
+    /** Updates an existing user */
     this.router.put("/:userId",
       this.authorization.checkAccessToken,
       (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.UPDATE_ALL_FIELDS),
       this.controller.updateUser.bind(this.controller)
     );
 
-    /** Delete user */
+    /** Deletes an existing user */
     this.router.delete("/:userId",
       this.authorization.checkAccessToken,
       (req, res, next) => this.authorization.checkPermissionLevel(req, res, next, RESOURCE.users, ACTION.DELETE_ONE_INSTANCE),
