@@ -1,0 +1,88 @@
+1. Benchmark redis vs pbkdf2. If redis is faster cache hashed passwords.
+
+vault structure:
+{
+  "vault": [
+    "folder1": [
+      "1": {
+        "title": "encryptedvalue",
+        "url": "encryptedvalue",
+        "username": "encryptedvalue",
+        "password": "encryptedvalue",
+        "notes": "encryptedvalue"
+      },
+      "2": {
+        "title": "encryptedvalue",
+        "url": "encryptedvalue",
+        "username": "encryptedvalue",
+        "password": "encryptedvalue",
+        "notes": "encryptedvalue"
+      },
+      "3": {
+        "title": "encryptedvalue",
+        "url": "encryptedvalue",
+        "username": "encryptedvalue",
+        "password": "encryptedvalue",
+        "notes": "encryptedvalue"
+      }
+    ],
+    "folder2": [
+      "1": {
+        "title": "encryptedvalue",
+        "url": "encryptedvalue",
+        "username": "encryptedvalue",
+        "password": "encryptedvalue",
+        "notes": "encryptedvalue"
+      },
+      "2": {
+        "title": "encryptedvalue",
+        "url": "encryptedvalue",
+        "username": "encryptedvalue",
+        "password": "encryptedvalue",
+        "notes": "encryptedvalue"
+      },
+      "3": {
+        "title": "encryptedvalue",
+        "url": "encryptedvalue",
+        "username": "encryptedvalue",
+        "password": "encryptedvalue",
+        "notes": "encryptedvalue"
+      }
+    ]
+  ],
+  "notes": [
+    "folder1": [
+      "1": {
+        "title": "encryptedvalue",
+        "text": "encryptedvalue",
+        "creationDate": "encryptedvalue"
+      },
+      "2": {
+        "title": "encryptedvalue",
+        "text": "encryptedvalue",
+        "creationDate": "encryptedvalue"
+      }
+    ],
+    "folder2": [],
+    "folder3": [
+      "1": {
+        "title": "encryptedvalue",
+        "text": "encryptedvalue",
+        "creationDate": "encryptedvalue"
+      },
+      "2": {
+        "title": "encryptedvalue",
+        "text": "encryptedvalue",
+        "creationDate": "encryptedvalue"
+      },
+      "3": {
+        "title": "encryptedvalue",
+        "text": "encryptedvalue",
+        "creationDate": "encryptedvalue"
+      }
+    ]
+  ],
+  "documents": [
+
+  ]
+}

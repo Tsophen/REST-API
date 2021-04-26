@@ -6,14 +6,18 @@ export class AuthService {
    * 
    * @returns    Promise of a token/an error 
    */
-  public async createAccessToken(userId: string): Promise<String | Error> {
+  public async createAccessToken(userId: string): Promise<{ accessToken: string, expires: Number } | Error> {
     return new Promise((resolve, reject) => {
       if(!process.env.JWT_ACCESS_SECRET)
         return reject(new Error("Could not find a JWT Access Secret"));
       
       const token = jwt.sign({ id: userId }, process.env.JWT_ACCESS_SECRET, { expiresIn: "1m" });
+      const object = {
+        accessToken: token,
+        expires: Date.now() + (60*1000)
+      }
 
-      return resolve(token);
+      return resolve(object);
     });
   }
 

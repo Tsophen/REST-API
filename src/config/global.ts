@@ -53,6 +53,8 @@ const messages = {
   successfullyLoadedVault: "Successfully loaded vault",
 
   missingAuthorizationHeader: "Missing authorization header",
+  missingRefreshCookie: "Missing refresh cookie",
+
   missingOneOrMoreFields: "Missing one of more fields [keys]",
   submittedSuspiciousData: "You submitted data that our system found suspicious. If you think what you did should have worked, please contact us",
   emailAlreadyExists: "Email already in use",

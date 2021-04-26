@@ -69,7 +69,7 @@ export class Authorization {
       let token = req.headers["x-token"];
 
       if(!token)
-        return res.status(400).json(createResponse(false, messages.missingAuthorizationHeader));
+        return res.status(404).json(createResponse(false, messages.missingAuthorizationHeader));
 
       token = (<string>token).split(" ")[1];
 
@@ -104,7 +104,7 @@ export class Authorization {
     const refreshToken = req.cookies.refreshToken;
 
     if(!refreshToken)
-      return res.status(400).json(createResponse(false, messages.missingOneOrMoreFields));
+      return res.status(404).json(createResponse(false, messages.missingRefreshCookie));
 
     if(!process.env.JWT_REFRESH_SECRET)
       return res.status(500).json(createResponse(false, messages.internalServerError));

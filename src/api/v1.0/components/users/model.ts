@@ -2,6 +2,12 @@ import mongoose, { Model } from "mongoose";
 
 import { emailRegex, fullNameRegex } from "$config/global";
 
+interface VaultObject {
+  passwords: {}
+  notes: {}
+  documents: {}
+}
+
 /**
  * The User Schema in MongoDB
  */
@@ -53,7 +59,11 @@ const userSchema = new mongoose.Schema({
     vault: {
         type: Object,
         required: true,
-        default: {},
+        default: {
+          passwords: {},
+          notes: {},
+          documents: {}
+        },
     },
     permissionLevel: {
         type: Number,
@@ -74,7 +84,7 @@ export interface IUser extends mongoose.Document {
     phone?: String,
     phoneVerified?: Boolean,
     phoneVerificationCode?: Number,
-    vault?: Object,
+    vault?: VaultObject,
     permissionLevel?: Number,
     reminder?: String,
     createdAt?: Date,
