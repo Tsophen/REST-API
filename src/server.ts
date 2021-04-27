@@ -1,7 +1,9 @@
 import 'module-alias/register';
 
+import https from "https";
 import http from "http";
 import path from "path";
+import fs from "fs";
 
 import express from "express";
 import mongoose from "mongoose";
@@ -54,5 +56,16 @@ router.use("/v1.0/", api_v1_0);
 /** Applying the error handler to handle every request that was not solved by this point */
 router.use(errorHandler);
 
+/** Creating an HTTP router to redirect to HTTPS */
+const httpRouter = express();
+httpRouter.get('*', (req, res) => res.redirect('https://' + req.headers.host + req.url));
+
+/** SSL Certificate */
+const options = {
+  key: fs.readFileSync("./cert/key.pem", "utf8"),
+  cert: fs.readFileSync("./cert/server.crt", "utf8"),
+}
+
 /** Running the REST-API */
-http.createServer(router).listen(config.server.port,() => logger.info(`REST-API is running on ${config.server.hostname}:${config.server.port}`));
+http.createServer(httpRouter).listen(config.server.httpPort, () => logger.info(`REST-API is running on ${config.server.hostname}:${config.server.httpPort}`));
+https.createServer(options, router).listen(config.server.httpsPort, () => logger.info(`REST-API is running on ${config.server.hostname}:${config.server.httpsPort}`));
